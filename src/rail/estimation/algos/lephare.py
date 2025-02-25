@@ -257,7 +257,10 @@ class LephareEstimator(CatEstimator):
         ancil = dict(zmode=zmode, zmean=zmean)
         # Add the requested outputs.
         for c in self.config["output_keys"]:
-            ancil[c] = np.array(output[c])
+            if isinstance(output[c][0], str):
+                ancil[c] = np.array(output[c], dtype='|S10')
+            else:
+                ancil[c] = np.array(output[c])
         qp_dstn.set_ancil(ancil)
         self._do_chunk_output(qp_dstn, start, end, first)
 
